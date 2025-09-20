@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+
+.fic {
+  @apply flex items-center gap-2
+}
+
+.fjcic {
+  @apply flex items-center justify-center gap-2
+}
+
+.btn-singin-platform {
+  @apply bg-orange-50 flex justify-center items-center gap-5 w-[60px] border border-orange-100 shadow-sm py-3 rounded-md hover:text-orange-700 hover:scale-105 duration-500 cursor-pointer
+}
+
+.btn-orange {
+  @apply bg-[#FF5F05] rounded-md text-white px-4 py-2 font-bold hover:bg-[#ea4c09] flex justify-center
+}

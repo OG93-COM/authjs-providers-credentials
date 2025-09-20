@@ -1,0 +1,34 @@
+import type { NextAuthConfig } from "next-auth";
+import Github from "next-auth/providers/github";
+import Credentials from "next-auth/providers/credentials";
+import { loginSchema } from "./validationSchema";
+import * as bcrypt from "bcrypt";
+import { prisma } from "./prismadb";
+
+export default {
+  providers: [
+    Github,
+    // Login with password credentials
+    Credentials({
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        const validation = loginSchema.safeParse(credentials);
+        if (!validation.success) return null;
+
+        const { email, password } = validation.data;
+        const user = await prisma.user.findUnique({ where: { email } });
+        if (!user || !user.password) return null;
+
+        console.log(user.name , " Connected");
+
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        if (isPasswordMatch) return user;
+
+        return null;
+      },
+    }),
+  ],
+} satisfies NextAuthConfig;
