@@ -14,6 +14,11 @@ const nextConfig: NextConfig = {
         hostname: "avatars.githubusercontent.com",
         pathname: "**"
       },
+      {
+        protocol: "https",
+        hostname: "private-user-images.githubusercontent.com",
+        pathname: "**"
+      },
 
     ],
     deviceSizes:[300,420,768,1024,1200],
