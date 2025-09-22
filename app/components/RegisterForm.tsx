@@ -26,7 +26,7 @@ export default function LoginForm() {
 
                 if (!validation.success) {
                     // Récupérer les erreurs
-                    const fieldErrors: any = (validation.error.issues[0].message);
+                    const fieldErrors = (validation.error.issues[0].message);
                     setClientErrors(fieldErrors);
                     setServerSuccess("");
                     return;
@@ -48,6 +48,7 @@ export default function LoginForm() {
                 })
 
         }) }catch(err) {
+          console.log(err)
             toast.error("Désolé, il y a un problème 😭")
             }
     }

@@ -2,7 +2,6 @@
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import { toast } from 'react-toastify'
-import { loginSchema } from '@/libs/validationSchema'
 import { loginAction } from '@/libs/auth.action'
 import AlertLogin from './AlertLogin'
 import SignInBtn from './SignInBtn'
@@ -19,7 +18,7 @@ export default function LoginForm() {
         try {
             startTransition( async ()=>{
                 const formData = { email, password };
-                const validation = loginSchema.safeParse(formData);
+                // const validation = loginSchema.safeParse(formData);
 
 
                 loginAction(formData).then((result)=>{
@@ -36,6 +35,7 @@ export default function LoginForm() {
 
         }) }catch(err) {
             toast.error("Désolé, il y a un problème 😭")
+            console.log(err)
             }
     }
 
