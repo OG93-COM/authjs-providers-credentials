@@ -11,6 +11,7 @@ export default function LoginForm() {
     const [password, setPassword] = useState("")
     const [clientErrors, setClientErrors] = useState("");
     const [serverError, setServerError] = useState("");
+    const [serverSuccess, setServerSuccess] = useState("");
     const [isPending, startTransition] = useTransition();
 
     const handleLoginSubmit = (e : React.FormEvent)  => {
@@ -26,9 +27,11 @@ export default function LoginForm() {
                         setServerError(result.message)
                         return
                     } else if (result.success) {
+                        setEmail("");
+                        setPassword("");
                         setServerError("");
                         setClientErrors("");
-                        toast.success("Welcome User");
+                        setServerSuccess(result.message)
                     };
                 })
 
@@ -65,7 +68,9 @@ export default function LoginForm() {
                           className="w-full btn-orange text-sm disabled:bg-slate-500">
                           {isPending ? "Loading ..." : "Se Connecter"}
                           </button>
+
                           { (clientErrors || serverError) && <AlertLogin type="error" message={clientErrors || serverError} />}
+                          {serverSuccess && <AlertLogin type="success" message={serverSuccess} />}
 
                           <div className="flex items-center justify-end">
                               <Link href="#" className="text-sm font-medium text-orange-600 hover:underline">Mot de passe oublié?</Link>

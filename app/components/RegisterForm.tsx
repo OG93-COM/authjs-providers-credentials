@@ -6,6 +6,7 @@ import { registerSchema } from "@/libs/validationSchema";
 import { registerAction } from "@/libs/auth.action";
 import { toast } from "react-toastify";
 import AlertLogin from "./AlertLogin";
+import { redirect } from "next/navigation";
 
 export default function LoginForm() {
 
@@ -16,6 +17,7 @@ export default function LoginForm() {
     const [serverError, setServerError] = useState("");
     const [serverSuccess, setServerSuccess] = useState("");
     const [isPending, startTransition] = useTransition();
+
 
     const handleRegisterSubmit = (e : React.FormEvent)  => {
         e.preventDefault();
@@ -41,6 +43,8 @@ export default function LoginForm() {
                         setClientErrors("");
                         setServerSuccess(result.message);
                         toast.success("Register, Welcome User");
+                        redirect("/login")
+
                      } else if (!result.success) {
                         setServerError(result.message)
                         };

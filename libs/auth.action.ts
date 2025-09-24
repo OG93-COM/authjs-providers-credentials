@@ -5,6 +5,7 @@ import { prisma } from "../libs/prismadb";
 import { LoginFormData, RegisterFormData, loginSchema, registerSchema, } from "../libs/validationSchema";
 import * as bcrypt from "bcrypt";
 import { AuthError } from "next-auth";
+import { generateVerificationToken } from "./generateToken";
 
 
 // Login Action
@@ -17,8 +18,21 @@ export const loginAction = async (data: LoginFormData) => {
 
     const {email, password } = validation.data
 
+    const user = await prisma.user.findUnique({
+        where : {email}
+    })
+    if(!user || !user.email || !user.password) {
+        return { success: false, message: "Probleme de connexion. Invalid Crendentials" };
+    }
+
+    if(!user.emailVerified) {
+        await generateVerificationToken(email);
+        // Send Email Verification
+        return { success: true, message: "Un e-mail de confirmation vous a été envoyé. Veuillez vérifier votre boîte de réception." };
+    }
+
     try {
-        await signIn("credentials", {email, password, redirectTo:"/" })
+        await signIn("credentials", {email, password, redirectTo:"/profile" })
     } catch (error) {
         if(error instanceof AuthError) {
             switch(error.type){
@@ -31,7 +45,6 @@ export const loginAction = async (data: LoginFormData) => {
         throw error
     }
 
-    console.log(data);
     return { success: true, message: "Connected Successfully From server" };
 };
 
@@ -45,26 +58,30 @@ export const registerAction = async (data: RegisterFormData) => {
     }
 
     const {name, email, password} = validation.data
-    
-    const user = await prisma.user.findUnique({
-        where:{email},
-    })
-
-    if(user) return { success: false, message: "Cet email est déjà associé à un compte." };
-
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     try {
-        const newUser = await prisma.user.create({
-        data: {
-            name,
-            email,
-            password:hashedPassword,
-        },
+
+        const user = await prisma.user.findUnique({
+            where:{email},
+        })
+    
+        if(user) return { success: false, message: "Cet email est déjà associé à un compte." };
+    
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        await prisma.user.create({
+            data: {
+                name,
+                email,
+                password:hashedPassword,
+            },
         });
 
-        console.log("✅ New User Created:", newUser);
-        return { success: true, message: "Compte Creer avec succee" };
+        const verificationToken = await generateVerificationToken(email);
+        //  Send Email for verification
+
+        return { success: true, message: "Un e-mail de confirmation vous a été envoyé. Veuillez vérifier votre boîte de réception." };
+
     } catch (err: any) {
         // console.log("❌ Error Register:", err);
         return { success: false, message: "Erreur lors de l'inscription. L'email existe déjà ?" };
