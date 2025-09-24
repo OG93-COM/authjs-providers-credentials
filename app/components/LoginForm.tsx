@@ -25,6 +25,7 @@ export default function LoginForm() {
                 loginAction(formData).then((result)=>{
                     if (!result.success) {
                         setServerError(result.message)
+                        setServerSuccess("")
                         return
                     } else if (result.success) {
                         setEmail("");

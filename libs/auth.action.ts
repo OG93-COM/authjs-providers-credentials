@@ -6,6 +6,7 @@ import { LoginFormData, RegisterFormData, loginSchema, registerSchema, } from ".
 import * as bcrypt from "bcrypt";
 import { AuthError } from "next-auth";
 import { generateVerificationToken } from "./generateToken";
+import { sendVerificationToken } from "./mail";
 
 
 // Login Action
@@ -18,21 +19,23 @@ export const loginAction = async (data: LoginFormData) => {
 
     const {email, password } = validation.data
 
-    const user = await prisma.user.findUnique({
-        where : {email}
-    })
-    if(!user || !user.email || !user.password) {
-        return { success: false, message: "Probleme de connexion. Invalid Crendentials" };
-    }
-
-    if(!user.emailVerified) {
-        await generateVerificationToken(email);
-        // Send Email Verification
-        return { success: true, message: "Un e-mail de confirmation vous a été envoyé. Veuillez vérifier votre boîte de réception." };
-    }
-
     try {
+
+        const user = await prisma.user.findUnique({
+            where : {email}
+        })
+        if(!user || !user.email || !user.password) {
+            return { success: false, message: "Probleme de connexion. Invalid Crendentials" };
+        }
+
+        if(!user.emailVerified) {
+            const verificationToken = await generateVerificationToken(email);
+            await sendVerificationToken(verificationToken.email, verificationToken.token)
+            return { success: true, message: "Un e-mail de confirmation vous a été envoyé. Veuillez vérifier votre boîte de réception." };
+        }
+
         await signIn("credentials", {email, password, redirectTo:"/profile" })
+
     } catch (error) {
         if(error instanceof AuthError) {
             switch(error.type){
@@ -78,7 +81,7 @@ export const registerAction = async (data: RegisterFormData) => {
         });
 
         const verificationToken = await generateVerificationToken(email);
-        //  Send Email for verification
+        await sendVerificationToken(verificationToken.email, verificationToken.token)
 
         return { success: true, message: "Un e-mail de confirmation vous a été envoyé. Veuillez vérifier votre boîte de réception." };
 
