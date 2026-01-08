@@ -1,7 +1,13 @@
+import { auth } from '@/libs/auth'
+import { signOut } from 'next-auth/react'
 import Link from 'next/link'
 import React from 'react'
+import LogoutBtn from './LogoutBtn'
 
-export default function Nav() {
+export default async function Nav() {
+
+  const session = await auth()
+
 
   return (
 
@@ -19,12 +25,22 @@ export default function Nav() {
         <li>
           <Link href="/" className="block py-2 px-3 text-slate-100 rounded-sm md:bg-transparent  md:p-0 " aria-current="page">Home</Link>
         </li>
+        {session ? (
+        <>
         <li>
           <Link href="/profile" className="block py-2 px-3 text-slate-100 rounded-sm md:bg-transparent  md:p-0 " aria-current="page">Profile</Link>
         </li>
+        <li> 
+          <LogoutBtn/>
+        </li>
+        </>
+        ) : (
         <li>
           <Link href="/login" className="block py-2 px-3 text-slate-100 rounded-sm md:bg-transparent  md:p-0 " aria-current="page">Login</Link>
         </li>
+        )}
+        
+        
         
       </ul>
     </div>

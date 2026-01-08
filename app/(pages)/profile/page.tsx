@@ -1,4 +1,3 @@
-import LogoutBtn from '@/app/components/LogoutBtn'
 import { auth } from '@/libs/auth'
 import Image from 'next/image';
 
@@ -19,7 +18,6 @@ export default async function page() {
         <p>{session.user?.name}</p>
         </div>
       )}
-      {session && <LogoutBtn/> }
     </div>
   )
 }
