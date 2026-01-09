@@ -33,6 +33,9 @@ export default async function Nav() {
         <li> 
           <LogoutBtn/>
         </li>
+        <li className='text-sm text-slate-100'> 
+          {session.user.name}
+        </li>
         </>
         ) : (
         <li>
