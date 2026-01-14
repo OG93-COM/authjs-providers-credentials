@@ -42,9 +42,7 @@ export default async function Nav() {
           <Link href="/login" className="block py-2 px-3 text-slate-100 rounded-sm md:bg-transparent  md:p-0 " aria-current="page">Login</Link>
         </li>
         )}
-        
-        
-        
+
       </ul>
     </div>
   </div>
