@@ -1,4 +1,5 @@
 import { prisma } from "@/libs/prismadb";
+import { redirect } from "next/navigation";
 
 interface verifyPageProps {
     searchParams : Promise<{token : string}>
@@ -14,10 +15,14 @@ const VerifyAccountPage = async ({searchParams} : verifyPageProps) => {
     
     try {
       await prisma.user.update({where: {email: verifyToken.email}, data: {emailVerified: new Date()}})
-      return <div className="flex flex-col items-center justify-center my-10 p-2 rounded-r-md bg-green-200"> <p>Account Verified</p></div>
+      return <>
+      <div className="flex flex-col items-center justify-center my-10 p-2 rounded-r-md bg-green-200"> <p>Account Verified</p></div>
+      <button onClick={redirect("/login")}>Go to login page</button>
+      </>
     } catch (error) {
       return <div className="flex flex-col items-center justify-center my-10 p-2 rounded-r-md bg-red-200"><p>Error verifying account</p></div>
     }
+
 }
 
 export default VerifyAccountPage
