@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import edgeAuthConfig from "@/libs/auth.config.edge";
 import { NextResponse } from "next/server";
-import { boolean } from "zod";
 
 const { auth: middleware } = NextAuth(edgeAuthConfig);
 
