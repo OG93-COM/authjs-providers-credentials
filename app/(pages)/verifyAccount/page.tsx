@@ -14,6 +14,7 @@ const VerifyAccountPage = async ({ searchParams }: verifyPageProps) => {
   if (!verifyToken)
     return (
       <div className="flex flex-col items-center justify-center my-10">
+        {" "}
         <p>User not found</p>
       </div>
     );
@@ -27,13 +28,13 @@ const VerifyAccountPage = async ({ searchParams }: verifyPageProps) => {
     });
     return (
       <div className="flex flex-col items-center justify-center my-10 p-2 rounded-r-md bg-green-200">
+        {" "}
         <p>Account Verified</p>
       </div>
     );
   } catch (error) {
     return (
       <div className="flex flex-col items-center justify-center my-10 p-2 rounded-r-md bg-red-200">
-        {" "}
         <p>Error verifying account</p>
       </div>
     );
