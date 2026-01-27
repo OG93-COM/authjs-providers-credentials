@@ -1,20 +1,21 @@
 "use server";
 
-import { signIn } from "../libs/auth";
-import { prisma } from "../libs/prismadb";
-import { LoginFormData, RegisterFormData, loginSchema, registerSchema, } from "../libs/validationSchema";
+import { signIn } from "../auth";
+import { prisma } from "../prismadb";
+import { LoginFormData, RegisterFormData, loginSchema, registerSchema, } from "../validationSchema";
 import * as bcrypt from "bcrypt";
 import { AuthError } from "next-auth";
-import { generateVerificationToken } from "./generateToken";
-import { sendVerificationToken } from "./mail";
+import { generateVerificationToken } from "../generateToken";
+import { sendVerificationToken } from "../mail";
+import { ActionTypes } from "@/types/types";
 
 
 // Login Action
-export const loginAction = async (data: LoginFormData) => {
+export const loginAction = async (data: LoginFormData) : Promise<ActionTypes> => {
 
     const validation = loginSchema.safeParse(data);
     if (!validation.success) {
-        return { success: false, message: "Probleme de connexion" };
+        return { success: false, message: validation.error.issues[0].message || "Probleme de connexion, Réessayer ultérieurement" };
     }
 
     const {email, password } = validation.data
@@ -53,11 +54,11 @@ export const loginAction = async (data: LoginFormData) => {
 
 
 // Register Action
-export const registerAction = async (data: RegisterFormData) => {
+export const registerAction = async (data: RegisterFormData) : Promise<ActionTypes> => {
 
     const validation = registerSchema.safeParse(data);
     if (!validation.success) {
-        return { success: false, message: "Votre compte n’a pas pu être créé. Veuillez réessayer plus tard." };
+        return { success: false, message: validation.error.issues[0]?.message || "Votre compte n’a pas pu être créé. Veuillez réessayer plus tard." };
     }
 
     const {name, email, password} = validation.data

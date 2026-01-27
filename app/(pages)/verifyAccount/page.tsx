@@ -1,4 +1,4 @@
-import { verifyingEmailAction } from "@/libs/verification.action";
+import { verifyingEmailAction } from "@/libs/actions/verificationEmail.action";
 import Link from "next/link";
 
 

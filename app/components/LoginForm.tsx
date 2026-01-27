@@ -1,10 +1,11 @@
 "use client"
-import { useState, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import Link from 'next/link'
 import { toast } from 'react-toastify'
-import { loginAction } from '@/libs/auth.action'
+import { loginAction } from '@/libs/actions/auth.action'
 import AlertLogin from './AlertLogin'
 import SignInBtn from './SignInBtn'
+import { Eye, EyeClosed } from 'phosphor-react'
 
 export default function LoginForm() {
     const [email, setEmail] = useState("")
@@ -13,6 +14,8 @@ export default function LoginForm() {
     const [serverError, setServerError] = useState("");
     const [serverSuccess, setServerSuccess] = useState("");
     const [isPending, startTransition] = useTransition();
+
+    const [showPassword, setShowPassword] = useState<boolean>(false)
 
     const handleLoginSubmit = (e : React.FormEvent)  => {
         e.preventDefault()
@@ -36,12 +39,22 @@ export default function LoginForm() {
                     };
                 })
 
-
         }) }catch(err) {
             toast.error("Désolé, il y a un problème 😭")
             console.log(err)
             }
     }
+
+    useEffect(() => {
+        if (showPassword) {
+            const timer = setTimeout(() => {
+                setShowPassword(false);
+            }, 10000); // 10 secondes
+    
+            // Cleanup: annule le timer si le composant est démonté ou si showPassword change
+            return () => clearTimeout(timer);
+        }
+    }, [showPassword]);
 
   return (
     <div className="w-full bg-white/80 rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
@@ -56,13 +69,16 @@ export default function LoginForm() {
                                 disabled={isPending}/>
                           </div>
 
-                          <div>
+                          <div className='relative'>
                               <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Mot de Passe</label>
-                              <input type="password" name="password" id="password" placeholder="••••••••"
+                              <input type={showPassword ? "text" : "password"} name="password" id="password" placeholder="••••••••"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-600 focus:border-orange-600 block w-full p-2.5 "
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 disabled={isPending}/>
+                                {showPassword ? <EyeClosed size={22} color='grey' className='absolute right-3 top-10 cursor-pointer' onClick={()=> setShowPassword(prev => !prev)}/>
+                                  :  <Eye size={22} color='grey' className='absolute right-3 top-10 cursor-pointer animate-pulse duration-200' onClick={()=> setShowPassword((prev) => !prev)}/>
+                                }
                           </div>
 
                           <button disabled={isPending} type="submit"
@@ -74,7 +90,7 @@ export default function LoginForm() {
                           {serverSuccess && <AlertLogin type="success" message={serverSuccess} />}
 
                           <div className="flex items-center justify-end">
-                              <Link href="#" className="text-sm font-medium text-orange-600 hover:underline">Mot de passe oublié?</Link>
+                              <Link href="/forgot-password" className="text-sm font-medium text-orange-600 hover:underline">Mot de passe oublié?</Link>
                           </div>
 
                           <SignInBtn/>
