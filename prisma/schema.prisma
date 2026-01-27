@@ -2,6 +2,7 @@
 
 datasource db {
   provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -65,7 +66,16 @@ model Session {
 model VerificationToken {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   email      String
-  token      String
+  token      String @unique
+  expires    DateTime
+ 
+  @@unique([email, token])
+}
+
+model VerificationResetPasswordToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  email      String
+  token      String @unique
   expires    DateTime
  
   @@unique([email, token])

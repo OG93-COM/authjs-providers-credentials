@@ -1,3 +1,4 @@
+import { CheckCircle, WarningCircle } from "phosphor-react";
 
 interface alertProps{
     type:"success"| "error";
@@ -10,7 +11,8 @@ export default function AlertLogin({type, message} : alertProps) {
     }
   return (
     <div className={`rouded-md text-sm flex gap-2 items-center my-1 border p-2 ${setColors()}`}>
-         {message}
+        {type === "error" ? <WarningCircle/> : <CheckCircle/>}
+        {message}
     </div>
   )
 }

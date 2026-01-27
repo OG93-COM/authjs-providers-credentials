@@ -3,10 +3,11 @@ import React, { useState, useTransition } from "react";
 import SignInBtn from "./SignInBtn";
 import Link from "next/link";
 import { registerSchema } from "@/libs/validationSchema";
-import { registerAction } from "@/libs/auth.action";
+import { registerAction } from "@/libs/actions/auth.action";
 import { toast } from "react-toastify";
 import AlertLogin from "./AlertLogin";
 import { redirect } from "next/navigation";
+import { Eye, EyeClosed } from "phosphor-react";
 
 export default function LoginForm() {
 
@@ -17,6 +18,8 @@ export default function LoginForm() {
     const [serverError, setServerError] = useState("");
     const [serverSuccess, setServerSuccess] = useState("");
     const [isPending, startTransition] = useTransition();
+
+    const [showPassword, setShowPassword] = useState<boolean>(false)
 
 
     const handleRegisterSubmit = (e : React.FormEvent)  => {
@@ -90,19 +93,18 @@ export default function LoginForm() {
               disabled={isPending}/>
           </div>
 
-          <div>
+          <div className="relative">
             <label
               htmlFor="password"
               className="block mb-2 text-sm font-medium text-gray-900"> Mot de Passe </label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="••••••••"
+            <input type={showPassword ? "text" : "password"} name="password" id="password" placeholder="••••••••"
               className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-600 focus:border-orange-600 block w-full p-2 "
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={isPending}/>
+              {showPassword ? <EyeClosed size={22} color='grey' className='absolute right-3 top-10 cursor-pointer' onClick={()=> setShowPassword(prev => !prev)}/>
+                  :  <Eye size={22} color='grey' className='absolute right-3 top-10 cursor-pointer animate-pulse duration-200' onClick={()=> setShowPassword((prev) => !prev)}/>
+              }
           </div>
           
             { (clientErrors || serverError) && <AlertLogin type="error" message={clientErrors || serverError} />}

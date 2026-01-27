@@ -52,7 +52,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const userFromDb = await prisma.user.findUnique({
           where: { id: token.sub },
         });
-        console.log("User From Mongoo DB 🔥🔥🔥🔥🔥🔥🔥", userFromDb)
 
           if (userFromDb) {
             session.user = {
