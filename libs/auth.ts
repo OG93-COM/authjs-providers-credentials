@@ -60,6 +60,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               name: token.name as string,
               image: userFromDb?.image as string,
               role: userFromDb?.role as string,
+              enabledTowStep: userFromDb?.enabledTowStep as boolean,
             } as any;
           }
       }

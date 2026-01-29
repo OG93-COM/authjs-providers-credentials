@@ -46,7 +46,6 @@ export default function LoginForm() {
                         setClientErrors("");
                         setServerSuccess(result.message);
                         toast.success("Register, Welcome User");
-                        redirect("/login")
 
                      } else if (!result.success) {
                         setServerError(result.message)
