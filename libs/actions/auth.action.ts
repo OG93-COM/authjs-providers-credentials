@@ -91,3 +91,17 @@ export const registerAction = async (data: RegisterFormData) : Promise<ActionTyp
         return { success: false, message: "Erreur lors de l'inscription. L'email existe déjà ?" };
     }
 };
+
+// Toggle TwoStep Action
+export const toggleTwoStepAction = async (userId:string, isEnabled : boolean): Promise<ActionTypes> => {
+    try {
+        await prisma.user.update({
+            where : {id : userId},
+            data: {enabledTowStep: isEnabled}
+        })
+        return {success:true, message:`Changement du Vérification en deux étapes ${isEnabled ? "Activé" : "Désactivé"}`}
+    } catch (error) {
+        console.log(error)
+        return {success:false, message:"Il y a un probleme lors de changement du Vérification en deux étapes"}
+    }
+}
