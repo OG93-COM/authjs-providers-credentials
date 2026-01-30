@@ -1,6 +1,6 @@
 "use server"
 
-import { ActionTypes } from "@/types/types";
+import { ActionTypes } from "@/libs/types/types";
 import { generateResetPasswordToken } from "../generateToken";
 import { sendResetPasswordToken } from "../mail";
 import { prisma } from "../prismadb";
