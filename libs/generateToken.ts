@@ -60,7 +60,7 @@ export const generateTwoStepToken = async (email : string) => {
     })
         // Verified if token exist and delete old token
     if(twoStepToken) {
-        await prisma.verificationResetPasswordToken.delete({
+        await prisma.twoStepToken.delete({
             where : {id : twoStepToken.id}
         })
     }
