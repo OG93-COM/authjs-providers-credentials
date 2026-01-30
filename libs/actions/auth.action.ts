@@ -28,6 +28,11 @@ export const loginAction = async (data: LoginFormData) : Promise<LoginType> => {
             return { success: false, message: "Probleme de connexion. Invalid Crendentials" };
         }
 
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        if(!isPasswordMatch) {
+            return { success: false, message: "Mot de passe Incorrect 🤔" };
+        }
+
         if(!user.emailVerified) {
             const verificationToken = await generateVerificationToken(email);
             await sendVerificationToken(verificationToken.email, verificationToken.token)
