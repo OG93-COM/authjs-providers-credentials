@@ -18,9 +18,7 @@ export default async function page() {
           <p>{session.user?.role}</p>
           <p>{session.user?.email}</p>
           <p>{session.user?.name}</p>
-          <p>{JSON.stringify(session.user)}</p>
           </div>
-
 
           {session.user?.id && <ToggleTwoStep userId={session.user.id} isTowStepEnabled={session.user.enabledTowStep}/>}
         </>

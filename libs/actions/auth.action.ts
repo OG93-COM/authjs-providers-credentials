@@ -5,23 +5,22 @@ import { prisma } from "../prismadb";
 import { LoginFormData, RegisterFormData, loginSchema, registerSchema, } from "../validationSchema";
 import * as bcrypt from "bcrypt";
 import { AuthError } from "next-auth";
-import { generateVerificationToken } from "../generateToken";
-import { sendVerificationToken } from "../mail";
-import { ActionTypes } from "@/types/types";
+import { generateTwoStepToken, generateVerificationToken } from "../generateToken";
+import { sendTwoStepToken, sendVerificationToken } from "../mail";
+import { ActionTypes, LoginType } from "@/types/types";
 
 
 // Login Action
-export const loginAction = async (data: LoginFormData) : Promise<ActionTypes> => {
+export const loginAction = async (data: LoginFormData) : Promise<LoginType> => {
 
     const validation = loginSchema.safeParse(data);
     if (!validation.success) {
         return { success: false, message: validation.error.issues[0].message || "Probleme de connexion, Réessayer ultérieurement" };
     }
 
-    const {email, password } = validation.data
+    const {email, password, code } = validation.data
 
     try {
-
         const user = await prisma.user.findUnique({
             where : {email}
         })
@@ -35,10 +34,43 @@ export const loginAction = async (data: LoginFormData) : Promise<ActionTypes> =>
             return { success: true, message: "Un e-mail de confirmation vous a été envoyé. Veuillez vérifier votre boîte de réception." };
         }
 
+        if(user.enabledTowStep && user.email) {
+            if(code) {
+                const twoStepTokenFromDb = await prisma.twoStepToken.findFirst({where : {email: user.email}})
+                if(!twoStepTokenFromDb) {
+                    return { success: false, message: "Token Introuvable 🤔" }
+                }
+                if(twoStepTokenFromDb.token !== code){
+                    return { success: false, message: "Code est Invalide 🤷🏻" }
+                }
+
+                const isExpired = new Date(twoStepTokenFromDb.expires) < new Date()
+                if(isExpired) {
+                    return { success: false, message: "Votre code est expiré, Essayer une autre fois avec un nouveau code 🔄" }
+                }
+                await prisma.twoStepToken.delete({where : {id : twoStepTokenFromDb.id}})
+
+                const twoStepConfirmation = await prisma.twoStepConfirmation.findUnique({where : {userId : user.id}})
+                if(twoStepConfirmation){
+                    await prisma.twoStepConfirmation.delete({where : {id : twoStepConfirmation.id}})
+                }
+
+                await prisma.twoStepConfirmation.create({
+                    data : {userId: user.id}
+                })
+
+            } else {
+                const twoStepToken = await generateTwoStepToken(user.email)
+                await sendTwoStepToken(twoStepToken.email, twoStepToken.token)
+                return { success: true, message: "Un Code de confirmation vous a été envoyé. Veuillez vérifier votre boîte Email 📩" }
+            }
+        }
+
         await signIn("credentials", {email, password, redirectTo:"/profile" })
 
     } catch (error) {
         if(error instanceof AuthError) {
+            console.log("the XXXXXX error ", error)
             switch(error.type){
                 case "CredentialsSignin" :
                     return { success: false, message: "Email ou Mot de pass invalide" }
