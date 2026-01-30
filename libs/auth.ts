@@ -39,9 +39,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const userFromDb =  await prisma.user.findUnique({where : {id : user.id}})
         if(!userFromDb?.emailVerified) {
           return false;
-        } else {
-          return true;
         }
+
+        //TwoStep Confirmation
+        if(userFromDb.enabledTowStep) {
+          const twoStepConfirmation = await prisma.twoStepConfirmation.findUnique({where : {userId : user.id}})
+          if(!twoStepConfirmation) return false
+          await prisma.twoStepConfirmation.delete({where: {id : twoStepConfirmation.id}})
+        }
+        
+
+        return true
       },
 
     async session({ session, token }) {

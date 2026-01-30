@@ -21,7 +21,7 @@ export default async function Nav() {
         </svg>
     </button>
     <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-      <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg  md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0  ">
+      <ul className="font-medium flex flex-col items-center p-4 md:p-0 mt-4 border border-gray-100 rounded-lg  md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0  ">
         <li>
           <Link href="/" className="block py-2 px-3 text-slate-100 rounded-sm md:bg-transparent  md:p-0 " aria-current="page">Home</Link>
         </li>
@@ -30,11 +30,11 @@ export default async function Nav() {
         <li>
           <Link href="/profile" className="block py-2 px-3 text-slate-100 rounded-sm md:bg-transparent  md:p-0 " aria-current="page">Profile</Link>
         </li>
-        <li> 
-          <LogoutBtn/>
+        <li className='text-xs  text-slate-300 ms-10'>
+          Hi, {session.user.name} 😊
         </li>
-        <li className='text-sm text-slate-100'> 
-          {session.user.name}
+        <li>
+          <LogoutBtn/>
         </li>
         </>
         ) : (

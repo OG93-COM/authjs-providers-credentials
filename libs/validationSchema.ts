@@ -12,6 +12,7 @@ export const loginSchema = z.object({
     .regex(/[a-z]/, "Verifier votre mot de passe")
     .regex(/[0-9]/, "Verifier votre mot de passe")
     .regex(/[^A-Za-z0-9]/, "Verifier votre mot de passe"),
+    code: z.string().optional()
 })
 
     export const registerSchema = z.object({

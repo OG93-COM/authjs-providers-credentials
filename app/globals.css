@@ -17,5 +17,5 @@
 }
 
 .btn-orange {
-  @apply bg-[#FF5F05] rounded-md text-white px-4 py-2 font-bold hover:bg-[#ea4c09] flex justify-center
+  @apply bg-[#035ab6] rounded-md text-white px-4 py-2 font-bold hover:bg-[#0245a2] flex justify-center cursor-pointer duration-300
 }
