@@ -7,7 +7,7 @@ import * as bcrypt from "bcrypt";
 import { AuthError } from "next-auth";
 import { generateTwoStepToken, generateVerificationToken } from "../generateToken";
 import { sendTwoStepToken, sendVerificationToken } from "../mail";
-import { ActionTypes, LoginType } from "@/types/types";
+import { ActionTypes, LoginType } from "@/libs/types/types";
 
 
 // Login Action
