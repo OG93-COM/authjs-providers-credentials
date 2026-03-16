@@ -54,7 +54,8 @@ export const changePasswordAction = async (data: ChangePasswordData, token:strin
         if(isExpired) return { success: false, message: "Token Expirè, Essayer une autre fois avec un nouveau code." };
 
         const user = await prisma.user.findUnique({where : {email: resetPasswordToken.email}})
-        if(!user) return { success: false, message: "Utilisateur non trouvè." };if(!resetPasswordToken) return { success: false, message: "Token non trouvè." };
+        if(!user) return { success: false, message: "Utilisateur non trouvè." };
+        if(!resetPasswordToken) return { success: false, message: "Token non trouvè." };
 
 
         const hashedPassword = await bcrypt.hash(newPassword, 10);

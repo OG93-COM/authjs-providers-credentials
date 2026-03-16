@@ -9,7 +9,7 @@ const ForgotPasswordPage = () => {
       </h1>
     </div>
     <div className="w-full flex justify-center items-center mb-20">
-      <ForgotPasswordForm />
+        <ForgotPasswordForm />
     </div>
   </>
   )

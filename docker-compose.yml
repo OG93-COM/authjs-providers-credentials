@@ -1,0 +1,25 @@
+
+services:
+  nextjs-app:
+    container_name: nextjsauth-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: ${DATABASE_URL}
+        NEXTAUTH_URL: ${NEXTAUTH_URL}
+        NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+        AUTH_TRUST_HOST: ${AUTH_TRUST_HOST}
+        RESEND_API_KEY: ${RESEND_API_KEY}
+
+    ports:
+      - "3000:3000"
+
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      AUTH_TRUST_HOST: ${AUTH_TRUST_HOST}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+
+    restart: always

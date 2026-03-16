@@ -1,12 +1,13 @@
 "use client"
-import { useEffect, useState, useTransition } from 'react'
+import { Suspense, useEffect, useState, useTransition } from 'react'
 import Link from 'next/link'
 import toast from 'react-hot-toast';
 import { loginAction } from '@/libs/actions/auth.action'
 import AlertLogin from './AlertLogin'
-import SignInBtn from './SignInBtn'
+// import SignInBtn from './SignInBtn'
 import { Eye, EyeClosed } from 'phosphor-react'
 import { loginSchema } from '@/libs/validationSchema';
+import SignInBtn from './SignInBtn';
 
 export default function LoginForm() {
     const [email, setEmail] = useState("")
@@ -113,7 +114,9 @@ export default function LoginForm() {
                                 <Link href="/forgot-password" className="text-sm font-medium text-orange-600 hover:underline">Mot de passe oublié?</Link>
                             </div>
 
-                            <SignInBtn/>
+                            <Suspense fallback={<div className="w-4 h-4 border-t-2 border-b-2 border-slate-900 rounded-full animate-spin"></div>}>
+                                <SignInBtn />
+                            </Suspense>
 
                             <p className="text-sm font-light text-gray-500">
                             Vous n’avez pas de compte ? <Link href="/register" className="font-medium text-[#1488CC] hover:underline">Inscrivez-vous</Link>
