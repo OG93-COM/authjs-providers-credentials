@@ -1,3 +1,5 @@
+
+import { Suspense } from "react"
 import ResetPasswordForm from "./ResetPasswordForm"
 
 const ResetPasswordPage = async () => {
@@ -11,7 +13,9 @@ const ResetPasswordPage = async () => {
       </h1>
     </div>
     <div className="w-full flex justify-center items-center mb-20">
-      <ResetPasswordForm />
+      <Suspense fallback={<div className="w-4 h-4 border-t-2 border-b-2 border-slate-900 rounded-full animate-spin"></div>}>
+        <ResetPasswordForm />
+      </Suspense>
     </div>
   </>
   )

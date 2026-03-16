@@ -23,12 +23,14 @@ const ResetPasswordForm = () => {
     const params = useSearchParams();
     const token = params.get("token")
 
+
     const handleResetPawssordSubmit = (e : React.FormEvent)  => {
         e.preventDefault()
         try {
             startTransition( async ()=>{
                 if(newPassword !== confirmPassword) {
                     setClientErrors("Mot de passe ne sont pas identique")
+                    return;
                 }
 
                 if(!token) return setClientErrors("Token non trouvé, Réessayer!")

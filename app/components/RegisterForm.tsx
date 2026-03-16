@@ -1,13 +1,13 @@
 "use client"
-import React, { useState, useTransition } from "react";
-import SignInBtn from "./SignInBtn";
+import React, { Suspense, useState, useTransition } from "react";
+// import SignInBtn from "./SignInBtn";
 import Link from "next/link";
 import { registerSchema } from "@/libs/validationSchema";
 import { registerAction } from "@/libs/actions/auth.action";
 import { toast } from "react-toastify";
 import AlertLogin from "./AlertLogin";
-import { redirect } from "next/navigation";
 import { Eye, EyeClosed } from "phosphor-react";
+import SignInBtn from "./SignInBtn";
 
 export default function LoginForm() {
 
@@ -112,7 +112,10 @@ export default function LoginForm() {
                 {isPending ? "Loading..." : "Créer un compte"}
             </button>
 
-          <SignInBtn />
+          <Suspense fallback={<div className="w-4 h-4 border-t-2 border-b-2 border-slate-900 rounded-full animate-spin"></div>}>
+            <SignInBtn />
+          </Suspense>
+
           <p className="text-sm font-light text-gray-500">
             Vous avez déjà un compte ?{" "}
             <Link
