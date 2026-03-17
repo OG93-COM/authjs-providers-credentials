@@ -49,9 +49,9 @@ jobs:
                     sudo docker compose down
 
                     DATABASE_URL="${{ secrets.DATABASE_URL }}" \
-                  NEXTAUTH_URL="${{ secrets.NEXTAUTH_URL }}" \
-                  NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" \
-                  RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}" \
-                  AUTH_TRUST_HOST="true" \
+                    NEXTAUTH_URL="${{ secrets.NEXTAUTH_URL }}" \
+                    NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" \
+                    RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}" \
+                    AUTH_TRUST_HOST="true" \
 
                     sudo docker compose up -d
