@@ -18,7 +18,8 @@ jobs:
               uses: actions/checkout@v6
 
             - name: build docker image
-              run: docker build -t ${{ env.IMAGE_NAME }} --build-arg DATABASE_URL="${{ secrets.DATABASE_URL }}" --build-arg NEXTAUTH_URL="${{ secrets.NEXTAUTH_URL }}" --build-arg NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" --build-arg AUTH_TRUST_HOST=true --build-arg RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}" .
+              run: docker build -t ${{ env.IMAGE_NAME }} .
+              #  --build-arg DATABASE_URL="${{ secrets.DATABASE_URL }}" --build-arg NEXTAUTH_URL="${{ secrets.NEXTAUTH_URL }}" --build-arg NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" --build-arg AUTH_TRUST_HOST=true --build-arg RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}"
 
             - name: tag image by version
               run: docker tag ${{env.IMAGE_NAME}} ${{env.IMAGE_NAME}}:v${{github.run_number}}
@@ -47,11 +48,10 @@ jobs:
                     cd /home/user/nextjs-devops-script
                     sudo docker compose down
 
-                    export DATABASE_URL="${{ secrets.DATABASE_URL }}"
-                    export NEXTAUTH_URL="${{ secrets.NEXTAUTH_URL }}"
-                    export NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}"
-                    export RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}"
-                    export AUTH_TRUST_HOST="true"
+                    DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+                    NEXTAUTH_URL="${{ secrets.NEXTAUTH_URL }}" \
+                    NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" \
+                    RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}" \
+                    AUTH_TRUST_HOST="true" \
 
-                    
                     sudo docker compose up -d
