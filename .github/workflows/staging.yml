@@ -45,8 +45,8 @@ jobs:
                 username: ${{ secrets.VPS_USERNAME }}
                 password: ${{ secrets.VPS_PASSWORD }}
                 script: |
-                    cd /home/user/nextjs-devops-script
-                    sudo docker compose down
+                    cd /home/user/nextjs-devops-script \
+                    sudo docker compose down \
 
                     DATABASE_URL="${{ secrets.DATABASE_URL }}" \
                     NEXTAUTH_URL="${{ secrets.NEXTAUTH_URL }}" \
