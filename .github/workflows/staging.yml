@@ -18,15 +18,7 @@ jobs:
               uses: actions/checkout@v6
 
             - name: build docker image
-              run: |
-                docker build \
-                  -t ${{ env.IMAGE_NAME }} \
-                  --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} \
-                  --build-arg NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} \
-                  --build-arg NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} \
-                  --build-arg AUTH_TRUST_HOST=true \
-                  --build-arg RESEND_API_KEY=${{ secrets.RESEND_API_KEY }} \
-                  .
+              run: docker build -t ${{ env.IMAGE_NAME }} --build-arg DATABASE_URL="${{ secrets.DATABASE_URL }}" --build-arg NEXTAUTH_URL="${{ secrets.NEXTAUTH_URL }}" --build-arg NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" --build-arg AUTH_TRUST_HOST=true --build-arg RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}" .
 
             - name: tag image by version
               run: docker tag ${{env.IMAGE_NAME}} ${{env.IMAGE_NAME}}:v${{github.run_number}}
