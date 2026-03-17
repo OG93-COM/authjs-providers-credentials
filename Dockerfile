@@ -1,5 +1,5 @@
 # ---------- 1️⃣ Dependencies ----------
-    FROM node:20-alpine AS deps
+FROM node:20.19-alpine3.21 AS deps
     WORKDIR /app
     
     COPY package*.json ./
