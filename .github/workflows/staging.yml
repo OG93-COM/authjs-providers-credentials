@@ -54,4 +54,4 @@ jobs:
                     RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}" \
                     AUTH_TRUST_HOST="true" \
 
-                    sudo docker compose up -d
+                    sudo -E docker compose up -d
