@@ -45,11 +45,13 @@ jobs:
                 password: ${{ secrets.VPS_PASSWORD }}
                 script: |
                     cd /home/user/nextjs-devops-script
+                    sudo docker compose down
+
                     export DATABASE_URL="${{ secrets.DATABASE_URL }}"
                     export NEXTAUTH_URL="${{ secrets.NEXTAUTH_URL }}"
                     export NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}"
                     export RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}"
                     export AUTH_TRUST_HOST="true"
-                    sudo docker compose down
-                    sudo docker compose pull
+
+                    
                     sudo docker compose up -d
