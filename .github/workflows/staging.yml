@@ -3,7 +3,7 @@ name: Deployment To Staging
 on:
     push:
         branches:
-            - main
+            - master
 
 env:
   IMAGE_NAME: ${{ vars.DOCKERHUB_USERNAME }}/nextjs-project

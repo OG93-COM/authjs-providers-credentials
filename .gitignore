@@ -13,6 +13,8 @@
 # testing
 /coverage
 
+.dockerignore
+
 # next.js
 /.next/
 /out/
